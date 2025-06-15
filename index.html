@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Ping Results</title>
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+  <h2>Ping Results (Last 100 Entries)</h2>
+  <canvas id="pingChart" width="400" height="200"></canvas>
+
+  <script>
+    async function loadData() {
+      const response = await fetch('/data');
+      const data = await response.json();
+
+      const ctx = document.getElementById('pingChart').getContext('2d');
+      const chart = new Chart(ctx, {
+        type: 'bar',
+        data: {
+          labels: ['google.com', 'msn.com', 'failures'],
+          datasets: [{
+            label: 'Ping Success Count',
+            data: [data['google.com'], data['msn.com'], data['failures']],
+            backgroundColor: ['#4caf50', '#2196f3', '#f44336']
+          }]
+        },
+        options: {
+          scales: {
+            y: {
+              beginAtZero: true,
+              stepSize: 1
+            }
+          }
+        }
+      });
+    }
+
+    loadData();
+  </script>
+</body>
+</html>
